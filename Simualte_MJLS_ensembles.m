@@ -19,7 +19,7 @@ x_ic=MJLS.x_ic;
 p_ic=MJLS.p_ic;
 nx=MJLS.nx;
 
-steps=20;
+steps=200;
 samples=200;
 %% Propogate probabilities and plot
 x=zeros(MJLS.nx*samples,steps);

@@ -8,8 +8,9 @@ addpath('./examples/')
 % Example 3: Unstable+Unstable=Stable  
 % Example 4: Stable+Stable=Unstable
 % Example 5: Network Stabilization with an informed agent
+% Example 8: Mass spring damper system with random spring stiffness
 
-MJLS=example_7_network_stabilization_toy();
+MJLS=example_8();
 
 
 eig1=eig(MJLS.As{1});

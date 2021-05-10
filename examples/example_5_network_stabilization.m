@@ -9,6 +9,8 @@ function MJLS=example_5_network_stabilization()
 % MJLS.x_ic=[1;1];
 % MJLS.p_ic=[0.5;0.5];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+addpath('./lib/')
+
 no_agents=5;    % number of agents
 density=0.05;   % Probability that a link is present between agents i and j
 N=20;            % Number of Markov modes (possible graphs)

@@ -2,6 +2,8 @@ clear all
 close all
 clc
 addpath('./examples/')
+addpath('./lib/')
+
 %% Define the MJLS
 % Eaxmple 1: scaler not MSS
 % Example 2: scalar MSS

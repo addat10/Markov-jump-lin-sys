@@ -1,5 +1,6 @@
 function [x,p] = Simulate_MJLS(MJLS,steps,samples,ref)
-
+% This function simulates the given MJLS with given number of samples and a
+% given references
 %% Propogate probabilities and states
 x=zeros(MJLS.nx,steps,samples);
 x(:,1,:)=MJLS.x_ic*ones(1,samples);

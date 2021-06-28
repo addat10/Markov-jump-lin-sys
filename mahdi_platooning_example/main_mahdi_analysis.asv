@@ -37,10 +37,10 @@ title('Transition Probability Matrix')
 %ref=[5;4;3;2;1]*ones(1,steps)+1;
 %ref=1*[5;4;3;2;1]+1*(1:steps);
 [ref_leader]=gen_ref_pos_vel(MJLS.dt);
-ref=[1*[5;4;3;2;1]+ref_leader(1,:);ones(5,1)*ref_leader(2,:)];
+ref=[1*[5;4;3;2;1]*ref_leader(11);ones(5,1)*ref_leader(2)];
 
 % Set appropriate initial conditions
-MJLS.x_ic=[ref(:,1)];
+MJLS.x_ic=[ref(:,1);20*ones(5,1)];
 
 % Time-stepping
 steps=size(ref,2);

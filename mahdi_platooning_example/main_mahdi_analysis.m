@@ -4,11 +4,11 @@ clc
 addpath('../lib')
 addpath(genpath('./connectivity_data_mahdi'))
 
-dir1='2458.CC';% 888.Base
-dir2='300-400';
+% dir1='2458.CC';% 888.Base
+% dir2='300-400';
+% TPM_path=['./connectivity_data_mahdi/MC_probability/',dir1,'/',dir2,'/Transition_Probability.mat']; % First data
 
-%TPM_path='./connectivity_data_mahdi/Transition_Probability.mat'; % First data
-TPM_path=['./connectivity_data_mahdi/MC_probability/',dir1,'/',dir2,'/Transition_Probability.mat']; % First data
+TPM_path='./connectivity_data_mahdi/Transition_Probability.mat'; % First data
 
 %% Define the MJLS
 MJLS=example_mahdi_double_int(TPM_path);

@@ -6,7 +6,7 @@ MJLS.As={};
 MJLS.Bs={};
 MJLS.Laps={};
 MJLS.dt=0.1;
-Kp=3;Kd=5.2; % design stable for L_1 and unstable for L_64
+Kp=2;Kd=5; % design stable for L_1 and unstable for L_64
 %Kp=10;Kd=4;T=0.1; % design stable for L_64 
 n=5;
 At=diag(ones(n,1))+diag(ones(n-1,1),1); % Always connected
@@ -50,5 +50,6 @@ A_12=T*eye(n)-0.5*Kd*T^2*L;
 A_21=-Kp*T*L;
 A_22=eye(n)-Kd*T*L;    
 A=[A_11,A_12;A_21,A_22];
-B=[0.5*T^2*Kp*L, 0.5*T^2*Kd*L;T*Kp*L, 0.5*T^2*Kd*L];
+B=[ 0.5*T^2*Kp*L,   0.5*T^2*Kd*L;...
+    T*Kp*L,         T*Kd*L];
 end

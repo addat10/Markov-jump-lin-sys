@@ -26,23 +26,45 @@ toc
  figure
  plot(eigs,'o')
  title('Spectrum of the transition Matrix')
+%% Visualize the Transition probability Matrix
+figure()
+plot_matrix_data(MJLS.T,'Transition Probability Matrix')
+title('Transition Probability Matrix')
+ 
 %% Simulate MJLS
-samples=100;
-steps=30;
+
+% Generate Reference
 %ref=[5;4;3;2;1]*ones(1,steps)+1;
-ref=1*[5;4;3;2;1]+1*(1:steps);
+%ref=1*[5;4;3;2;1]+1*(1:steps);
+% Make sure that the time-step used here is the same as the one in the 
+% description of the MJLS 
+dt=0.1; % timestep
+[ref_leader]=gen_ref(dt);
+ref=1*[5;4;3;2;1]+ref_leader;
+
+% Set appropriate initial conditions
+MJLS.x_ic=[ref(:,1);20*ones(5,1)];
+
+% Time-stepping
+steps=size(ref,2);
+samples=1;
 [x,p] = Simulate_MJLS(MJLS,steps,samples,ref);
 %% Extract positions
 N=MJLS.nx/2;
 pos=zeros(N,steps,samples);
 vel=zeros(N,steps,samples);
+acc=zeros(N,steps,samples);
 for i=1:samples
     pos(:,:,i)=x(1:N,:,i);
     vel(:,:,i)=x(N+1:end,:,i);
+    acc(:,1,i)=zeros(N,1);
+    acc(:,2:end,i)=(1/dt)*[x(N+1:end,2:end,i)-x(N+1:end,1:(end-1),i)];    
 end
 %% Plots
 plot_ensemble_trajs(pos,samples)
-%% Plot positions
+%% Plot states
+
+% Plot Positions
 plot_samples=samples;
 figure()
 for i=1:plot_samples
@@ -52,6 +74,7 @@ for i=1:plot_samples
     end        
 end
 title('Positions')
+
 % Plot velocities
 figure()
 for i=1:plot_samples
@@ -61,6 +84,16 @@ for i=1:plot_samples
     end        
 end
 title('Velocities')
+
+% Plot Accelerations
+figure()
+for i=1:plot_samples
+    for agent=1:N
+        plot(1:steps,acc(agent,:,i))
+        hold on
+    end        
+end
+title('Acceleration')
 %% Plot probabilities
 figure()
 for i=1:steps
@@ -72,7 +105,3 @@ for i=1:steps
     hold on
 end
 title('Dynamics of probability distributions')
-%% Visualize the Transition probability Matrix
-figure()
-plot_matrix_data(MJLS.T,'Transition Probability Matrix')
-title('Transition Probability Matrix')

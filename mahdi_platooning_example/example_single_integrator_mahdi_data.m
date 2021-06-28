@@ -5,7 +5,8 @@ MJLS.N=64;
 MJLS.As={};
 MJLS.Bs={};
 MJLS.Laps={};
-Kp=3;T=0.1;
+MJLS.dt=0.1;
+Kp=3;
 n=5;
 At=diag(ones(n,1))+diag(ones(n-1,1),1); % Always connected
 for i=1:MJLS.N            
@@ -14,7 +15,7 @@ for i=1:MJLS.N
     D(1)=2;                             % Leader externally controlled
     Li=diag(D)-At';
     MJLS.Laps{i}=Li;
-    [Ai,Bi]=get_AB(Li,Kp,T);
+    [Ai,Bi]=get_AB(Li,Kp,MJLS.dt);
     MJLS.As{i}=Ai;
     MJLS.Bs{i}=Bi;
 end

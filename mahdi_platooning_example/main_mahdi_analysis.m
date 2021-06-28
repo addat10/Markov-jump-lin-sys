@@ -22,10 +22,10 @@ tic
 rho_T=max(abs(eig(T_cal)));
 toc
 %% Analyze probability dynamics
- eigs=eig(MJLS.T);
- figure
- plot(eigs,'o')
- title('Spectrum of the transition Matrix')
+eigs=eig(MJLS.T);
+figure
+plot(eigs,'o')
+title('Spectrum of the transition Matrix')
 %% Visualize the Transition probability Matrix
 figure()
 plot_matrix_data(MJLS.T,'Transition Probability Matrix')
@@ -36,10 +36,7 @@ title('Transition Probability Matrix')
 % Generate Reference
 %ref=[5;4;3;2;1]*ones(1,steps)+1;
 %ref=1*[5;4;3;2;1]+1*(1:steps);
-% Make sure that the time-step used here is the same as the one in the 
-% description of the MJLS 
-dt=0.1; % timestep
-[ref_leader]=gen_ref(dt);
+[ref_leader]=gen_ref(MJLS.dt);
 ref=1*[5;4;3;2;1]+ref_leader;
 
 % Set appropriate initial conditions
@@ -58,7 +55,7 @@ for i=1:samples
     pos(:,:,i)=x(1:N,:,i);
     vel(:,:,i)=x(N+1:end,:,i);
     acc(:,1,i)=zeros(N,1);
-    acc(:,2:end,i)=(1/dt)*[x(N+1:end,2:end,i)-x(N+1:end,1:(end-1),i)];    
+    acc(:,2:end,i)=(1/MJLS.dt)*[x(N+1:end,2:end,i)-x(N+1:end,1:(end-1),i)];    
 end
 %% Plots
 plot_ensemble_trajs(pos,samples)

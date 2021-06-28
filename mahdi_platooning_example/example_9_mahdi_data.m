@@ -5,7 +5,8 @@ MJLS.N=64;
 MJLS.As={};
 MJLS.Bs={};
 MJLS.Laps={};
-Kp=3;Kd=5.2;T=0.1; % design stable for L_1 and unstable for L_64
+MJLS.dt=0.1;
+Kp=3;Kd=5.2; % design stable for L_1 and unstable for L_64
 %Kp=10;Kd=4;T=0.1; % design stable for L_64 
 n=5;
 At=diag(ones(n,1))+diag(ones(n-1,1),1); % Always connected
@@ -15,7 +16,7 @@ for i=1:MJLS.N
     D(1)=2;                             % Leader externally controlled
     Li=diag(D)-At';
     MJLS.Laps{i}=Li;
-    [Ai,Bi]=get_AB(Li,Kp,Kd,T);
+    [Ai,Bi]=get_AB(Li,Kp,Kd,MJLS.dt);
     MJLS.As{i}=Ai;
     MJLS.Bs{i}=Bi;
 end

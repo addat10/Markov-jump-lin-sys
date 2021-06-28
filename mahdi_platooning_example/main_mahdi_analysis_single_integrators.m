@@ -27,8 +27,8 @@ title('Spectrum of the transition Matrix')
 %% Simulate MJLS
 samples=100;
 steps=30;
-%ref=[5;4;3;2;1]*ones(1,steps)+1;
-ref=ones(5,1)*ones(1,steps);
+ref=[5;4;3;2;1]*ones(1,steps)+1;
+%ref=ones(5,1)*ones(1,steps);
 [x,p] = Simulate_MJLS(MJLS,steps,samples,ref);
 %% Plots
 plot_ensemble_trajs(x,samples)

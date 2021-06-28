@@ -1,4 +1,4 @@
-function MJLS=example_single_integrator_mahdi_data()
+function MJLS=example_single_integrator_mahdi_data(TPM_path)
 % Create an MJLS system with data from Mahdi
 MJLS.N=64;
 % Need to create 64 A matrices
@@ -20,7 +20,7 @@ for i=1:MJLS.N
 end
 MJLS.nx=size(Ai,1);
 MJLS.x_ic=0*rand(n,1);
-load('./connectivity_data_mahdi/Transition_Probability.mat');
+load(TPM_path,'Transition_Probability');
 MJLS.T=Transition_Probability;
 
 % The stationary distribution is stored in the file p_ic.mat.

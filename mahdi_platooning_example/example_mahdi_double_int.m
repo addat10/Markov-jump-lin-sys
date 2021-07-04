@@ -1,12 +1,12 @@
-function MJLS=example_mahdi_double_int(TPM_path)
+function MJLS=example_mahdi_double_int(TPM_path,Kp,Kd,dt)
 % Create an MJLS system with data from Mahdi
 MJLS.N=64;
 % Need to create 64 A matrices
 MJLS.As={};
 MJLS.Bs={};
 MJLS.Laps={};
-MJLS.dt=0.1;
-Kp=2;Kd=5; % design stable for L_1 and unstable for L_64
+MJLS.dt=dt;
+%Kp=2;Kd=5; % design stable for L_1 and unstable for L_64
 %Kp=10;Kd=4;T=0.1; % design stable for L_64 
 n=5;
 At=diag(ones(n,1))+diag(ones(n-1,1),1); % Always connected

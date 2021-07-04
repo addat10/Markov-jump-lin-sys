@@ -11,14 +11,22 @@ addpath(genpath('./connectivity_data_mahdi'))
 % Best case rho_B = 0.95 rho_t=0.92
 dir1='888.Base';% 888.Base
 dir2='0-100';
-
 TPM_path=['./connectivity_data_mahdi/MC_probability/',dir1,'/',dir2,'/Transition_Probability.mat']; % First data
+
+% Fixed network
+%TPM_path=['./connectivity_data_mahdi/MC_probability/ideal_network/Transition_Probability_1.mat']; 
+%TPM_path=['./connectivity_data_mahdi/MC_probability/ideal_network/Transition_Probability_64.mat'];
 
 %TPM_path='./connectivity_data_mahdi/Transition_Probability.mat'; % First data
 
 %% Define the MJLS
-MJLS=example_mahdi_double_int(TPM_path);
-% p_ic happens to be the stationary distribution
+dt=0.1; % Sampling time
+
+% Define PD gains
+%Kp=1;Kd=10; % good performance for for L_1 and poor performance(unstable) for L_64
+Kp=1;Kd=5; % good performance for for L_64 and poor performance for L_1 
+
+MJLS=example_mahdi_double_int(TPM_path,Kp,Kd,dt);
 %% Analyze the defined MJLS
 % [B_cal,T_cal]=get_B_T_matrices(MJLS);
 % tic
@@ -106,6 +114,6 @@ for i=1:steps
         plot(1:MJLS.N,p(:,i))
     end
     hold on
-    pause
+    %pause
 end
 title('Dynamics of probability distributions')

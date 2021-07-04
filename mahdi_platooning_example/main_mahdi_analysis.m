@@ -4,23 +4,29 @@ clc
 addpath('../lib')
 addpath(genpath('./connectivity_data_mahdi'))
 
-dir1='2458.CC';% 888.Base
-dir2='300-400';
+% Worst case: rho_B = 0.95 rho_t=0.91
+% dir1='2458.CC';
+% dir2='900-1000';
 
-%TPM_path='./connectivity_data_mahdi/Transition_Probability.mat'; % First data
+% Best case rho_B = 0.95 rho_t=0.92
+dir1='888.Base';% 888.Base
+dir2='0-100';
+
 TPM_path=['./connectivity_data_mahdi/MC_probability/',dir1,'/',dir2,'/Transition_Probability.mat']; % First data
 
+%TPM_path='./connectivity_data_mahdi/Transition_Probability.mat'; % First data
+
 %% Define the MJLS
-MJLS=example_9_mahdi_data(TPM_path);  
+MJLS=example_mahdi_double_int(TPM_path);
 % p_ic happens to be the stationary distribution
 %% Analyze the defined MJLS
-[B_cal,T_cal]=get_B_T_matrices(MJLS);
-tic
-rho_B=max(abs(eig(B_cal)));
-toc
-tic
-rho_T=max(abs(eig(T_cal)));
-toc
+% [B_cal,T_cal]=get_B_T_matrices(MJLS);
+% tic
+% rho_B=max(abs(eig(B_cal)));
+% toc
+% tic
+% rho_T=max(abs(eig(T_cal)));
+% toc
 %% Analyze probability dynamics
 eigs=eig(MJLS.T);
 figure
@@ -36,11 +42,11 @@ title('Transition Probability Matrix')
 % Generate Reference
 %ref=[5;4;3;2;1]*ones(1,steps)+1;
 %ref=1*[5;4;3;2;1]+1*(1:steps);
-[ref_leader]=gen_ref(MJLS.dt);
-ref=1*[5;4;3;2;1]+ref_leader;
+[ref_leader]=gen_ref_pos_vel(MJLS.dt);
+ref=[50*[5;4;3;2;1]+ref_leader(1,:);ones(5,1)*ref_leader(2,:)];
 
 % Set appropriate initial conditions
-MJLS.x_ic=[ref(:,1);20*ones(5,1)];
+MJLS.x_ic=[ref(:,1)];
 
 % Time-stepping
 steps=size(ref,2);
@@ -100,5 +106,6 @@ for i=1:steps
         plot(1:MJLS.N,p(:,i))
     end
     hold on
+    pause
 end
 title('Dynamics of probability distributions')

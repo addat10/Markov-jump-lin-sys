@@ -8,9 +8,10 @@ addpath('./examples/')
 addpath('./lib/')
 
 rng(20)
-no_samples=1000;
+no_samples=100;
 rho_Ber=zeros(no_samples,1);
 rho_MJLS=zeros(no_samples,1);
+bound_ber=zeros(no_samples,1);
 for i=1:no_samples
     %% Define the MJLS
     [MJLS,Ber]=example_10();      
@@ -23,6 +24,7 @@ for i=1:no_samples
     [B_cal_Ber,T_cal_Ber]=get_B_T_matrices(Ber);
     rho_B_Ber=max(abs(eig(B_cal_Ber)));
     rho_Ber(i)=max(abs(eig(T_cal_Ber)));
+    bound_ber(i)=norm(T_cal_MJLS-T_cal_Ber);
 end
 %% Find examples where Bernoulli is stable but MJLS isn't
 id1=find(rho_Ber<1); % Bernouli stable
@@ -42,8 +44,9 @@ figure()
 plot(1:size(id1,1),rho_MJLS(id1),'r')
 hold on
 plot(1:size(id1,1),rho_Ber(id1),'b')
+plot(1:size(id1,1),rho_Ber(id1)+bound_ber(id1),'r--')
 plot(1:size(id1,1),1*ones(1,size(id1,1)),'k--')
-legend('MJLS spectral radius','Bernoulli spectral radius')
+legend('MJLS spectral radius','Bernoulli spectral radius','Bound')
 title('Examples where the Bernouli model is stable')
 
 % Plot examples which are MJLS stable

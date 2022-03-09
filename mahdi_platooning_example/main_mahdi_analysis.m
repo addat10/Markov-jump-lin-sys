@@ -4,19 +4,19 @@ clc
 addpath('../lib')
 addpath(genpath('./connectivity_data_mahdi'))
 
-% Worst case: rho_B = 0.95 rho_t=0.91
-% dir1='2458.CC';
-% dir2='900-1000';
-
-% Best case rho_B = 0.95 rho_t=0.92
-dir1='888.Base';% 888.Base
+% Select data for transition probability matrix
+dir1='888.Base';
 dir2='0-100';
 TPM_path=['./connectivity_data_mahdi/MC_probability/',dir1,'/',dir2,'/Transition_Probability.mat']; % First data
 
-% Fixed network
+% Fixed network:
+% Transition_Probability_1 corresponds to the sparsest graph (Line) just
+% based on sensors whereas Transition_Probability_64 corresponds to all
+% links connected at all times
 %TPM_path=['./connectivity_data_mahdi/MC_probability/ideal_network/Transition_Probability_1.mat']; 
 %TPM_path=['./connectivity_data_mahdi/MC_probability/ideal_network/Transition_Probability_64.mat'];
 
+% This the data that Mahdi shared at first
 %TPM_path='./connectivity_data_mahdi/Transition_Probability.mat'; % First data
 
 %% Define the MJLS
@@ -24,32 +24,31 @@ dt=0.1; % Sampling time
 
 % Define PD gains
 %Kp=1;Kd=10; % good performance for for L_1 and poor performance(unstable) for L_64
-Kp=1;Kd=5; % good performance for for L_64 and poor performance for L_1 
-
+%Kp=1;Kd=5; % good performance for for L_64 and poor performance for L_1 
+Kp=1;Kd=1;
 MJLS=example_mahdi_double_int(TPM_path,Kp,Kd,dt);
 %% Analyze the defined MJLS
-% [B_cal,T_cal]=get_B_T_matrices(MJLS);
-% tic
-% rho_B=max(abs(eig(B_cal)));
-% toc
-% tic
-% rho_T=max(abs(eig(T_cal)));
-% toc
-%% Analyze probability dynamics
+% System is mean-square stable iff rho_T < 1 
+[B_cal,T_cal]=get_B_T_matrices(MJLS);
+tic
+rho_B=max(abs(eig(B_cal))); % Expectation dynamics
+toc
+tic
+rho_T=max(abs(eig(T_cal))); % Covariance dynamics
+toc
+%% Analyze probability dynamics via the spectrum of the Transition Probability Matrix
 eigs=eig(MJLS.T);
 figure
 plot(eigs,'o')
 title('Spectrum of the transition Matrix')
-%% Visualize the Transition probability Matrix
+
+% Visualize the Transition probability Matrix
 figure()
 plot_matrix_data(MJLS.T,'Transition Probability Matrix')
 title('Transition Probability Matrix')
  
 %% Simulate MJLS
-
 % Generate Reference
-%ref=[5;4;3;2;1]*ones(1,steps)+1;
-%ref=1*[5;4;3;2;1]+1*(1:steps);
 [ref_leader]=gen_ref_pos_vel(MJLS.dt);
 ref=[50*[5;4;3;2;1]+ref_leader(1,:);ones(5,1)*ref_leader(2,:)];
 
@@ -104,7 +103,7 @@ for i=1:plot_samples
         hold on
     end        
 end
-title('Acceleration')
+title('Accelerations')
 %% Plot probabilities
 figure()
 for i=1:steps
@@ -117,3 +116,8 @@ for i=1:steps
     %pause
 end
 title('Dynamics of probability distributions')
+%% Open figures for ideal communication with fixed laplacian L_64
+openfig('ideal_communication_positions')
+openfig('ideal_communication_velocities')
+openfig('ideal_communication_accelerations')
+

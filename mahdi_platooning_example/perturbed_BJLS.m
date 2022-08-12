@@ -47,7 +47,7 @@ minimize 1
 
 subject to:
 
-exp_AtPA - cvx_tol*eye(n) <= P
+exp_AtPA + cvx_tol*eye(n) <= P
 P >= eye(n)
 cvx_end
 status=cvx_status; 

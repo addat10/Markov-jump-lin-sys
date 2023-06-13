@@ -5,8 +5,8 @@ addpath('../lib')
 addpath(genpath('./connectivity_data_mahdi'))
 
 % Select data for transition probability matrix
-dir1='888.Base';
-dir2='0-100';
+dir1='2458.Base';
+dir2='200-300';
 TPM_path=['./connectivity_data_mahdi/MC_probability/',dir1,'/',dir2,'/Transition_Probability.mat']; % First data
 
 % Fixed network:
@@ -29,13 +29,13 @@ Kp=1;Kd=1;
 MJLS=example_mahdi_double_int(TPM_path,Kp,Kd,dt);
 %% Analyze the defined MJLS
 % System is mean-square stable iff rho_T < 1 
-[B_cal,T_cal]=get_B_T_matrices(MJLS);
-tic
-rho_B=max(abs(eig(B_cal))); % Expectation dynamics
-toc
-tic
-rho_T=max(abs(eig(T_cal))); % Covariance dynamics
-toc
+% [B_cal,T_cal]=get_B_T_matrices(MJLS);
+% tic
+% rho_B=max(abs(eig(B_cal))); % Expectation dynamics
+% toc
+% tic
+% rho_T=max(abs(eig(T_cal))); % Covariance dynamics
+% toc
 %% Analyze probability dynamics via the spectrum of the Transition Probability Matrix
 eigs=eig(MJLS.T);
 figure
@@ -46,7 +46,13 @@ title('Spectrum of the transition Matrix')
 figure()
 plot_matrix_data(MJLS.T,'Transition Probability Matrix')
 title('Transition Probability Matrix')
+
+figure()
+sing_vals=sort(abs(eig(MJLS.T)),'descend');
+plot(1:size(MJLS.T,1),sing_vals)
  
+save('2458_Base_200_300','MJLS')
+
 %% Simulate MJLS
 % Generate Reference
 [ref_leader]=gen_ref_pos_vel(MJLS.dt);

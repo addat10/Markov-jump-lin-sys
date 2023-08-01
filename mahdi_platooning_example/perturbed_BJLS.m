@@ -3,13 +3,14 @@ close all
 clc
 addpath('../lib')
 addpath(genpath('./connectivity_data_mahdi'))
-dir1='2458.CC';% 888.Base
-dir2='200-300';
+dir1='888.CC';% 888.Base
+dir2='100-200';
 
 %TPM_path='./connectivity_data_mahdi/Transition_Probability.mat'; % First data
 TPM_path=['./connectivity_data_mahdi/MC_probability/',dir1,'/',dir2,'/Transition_Probability.mat']; % First data
 %% Define the MJLS
 MJLS=example_single_integrator_mahdi_data(TPM_path);  
+% MJLS=example_mahdi_double_int(TPM_path,1,1,0.1);
 % p_ic happens to be the stationary distribution
 %% Analyze the defined MJLS
 [B_cal,T_cal]=get_B_T_matrices(MJLS);
@@ -31,6 +32,7 @@ Delta_T=MJLS.T-T0;
 eps_T=max(max(Delta_T))
 Delta_T_1=norm(Delta_T,1)
 %% Analysis with LMIs
+eps_T=0.2;
 cvx_tol=1e-3;
 n=size(MJLS.As{1},1);
 
